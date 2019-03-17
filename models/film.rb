@@ -1,5 +1,6 @@
 require_relative('./customer')
 require_relative('./ticket')
+require_relative('./screening')
 require_relative('../db/sql_runner')
 
 class Film
@@ -67,5 +68,27 @@ class Film
     customer_hashes= SqlRunner.run(sql,values)
     return customer_hashes.count.to_i
   end
+
+  def screenings()
+    sql = 'SELECT screenings.*
+          FROM screenings
+          INNER JOIN tickets
+          ON screenings.id = tickets.screening_id
+          WHERE tickets.film_id = $1'
+    values = [@id]
+    screenings_hashes = SqlRunner.run(sql,values)
+    return Screening.map_items(screenings_hashes)
+  end
+
+  # def most_popular_screening
+  #   sql = 'SELECT tickets.*
+  #         FROM tickets
+  #         INNER JOIN screenings
+  #         ON screenings.id = tickets.screening_id
+  #         WHERE tickets.film_id = $1'
+  #   values = [@id]
+  #   tickets_hashes = SqlRunner.run(sql,values)
+  #   return Ticket.map_items(tickets_hashes)
+  # end
 
 end

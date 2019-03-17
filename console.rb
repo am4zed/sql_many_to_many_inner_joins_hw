@@ -1,8 +1,10 @@
 require_relative('./models/film')
 require_relative('./models/ticket')
 require_relative('./models/customer')
+require_relative('./models/screening')
 require_relative('./db/sql_runner')
 
+Screening.delete_all
 Ticket.delete_all
 Customer.delete_all
 Film.delete_all
@@ -19,11 +21,18 @@ film1.save
 film2 = Film.new('title' => 'Beethoven', 'price' => '6')
 film2.save
 
-ticket1 = Ticket.new('customer_id' => customer2.id, 'film_id' => film2.id)
+screening1 = Screening.new('film_id' => film1.id, 'time' => '15:30')
+screening1.save
+screening2 = Screening.new('film_id' => film1.id, 'time' => '19:30')
+screening2.save
+screening2 = Screening.new('film_id' => film2.id, 'time' => '19:00')
+screening2.save
+
+ticket1 = Ticket.new('customer_id' => customer2.id, 'film_id' => film2.id, 'screening_id' => 1)
 ticket1.save
-ticket2 = Ticket.new('customer_id' => customer2.id, 'film_id' => film1.id)
+ticket2 = Ticket.new('customer_id' => customer2.id, 'film_id' => film1.id, 'screening_id' => 2)
 ticket2.save
-ticket2 = Ticket.new('customer_id' => customer3.id, 'film_id' => film1.id)
+ticket2 = Ticket.new('customer_id' => customer3.id, 'film_id' => film1.id, 'screening_id' => 2)
 ticket2.save
 
 # p Customer.all
@@ -59,3 +68,11 @@ film2.update
 
 # p film1.customer_count
 # p film2.customer_count
+
+# p Screening.all
+
+p film1.screenings
+
+p film2.screenings
+
+# p film1.most_popular_screening
